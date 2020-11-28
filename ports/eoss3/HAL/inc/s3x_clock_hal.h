@@ -27,8 +27,8 @@
 
 //#include <FreeRTOS.h>
 //#include <task.h>
-#include "eoss3_dev.h"
-#include "test_types.h"
+//#include "eoss3_dev.h"
+//#include "test_types.h"
 #define MHZ 1000000
 #define KHZ 1000
 
@@ -110,32 +110,32 @@ typedef enum {
 } QOS_REQ_TYPE;
 
 /*To enable clock. Pass the clock ID as defined in the enum S3x_CLK_ID*/
-int S3x_Clk_Enable(UINT32_t clk_id);
+int S3x_Clk_Enable(uint32_t clk_id);
 
 /*To disable clock. Pass the clock ID as defined in the enum S3x_CLK_ID*/
-int S3x_Clk_Disable(UINT32_t clk_id);
+int S3x_Clk_Disable(uint32_t clk_id);
 
 /*To set clock rate. Pass the cloack ID and the desired rate*/
-int S3x_Clk_Set_Rate(UINT32_t clk_id, UINT32_t rate);
+int S3x_Clk_Set_Rate(uint32_t clk_id, uint32_t rate);
 
 /**To set clock rate. Pass the clock ID and the desired range of rate (min  and max rate value)*/
-//int S3x_Clk_Set_Rate(UINT32_t clk_id, UINT32_t rate_min,  UINT32_t rate_max);
+//int S3x_Clk_Set_Rate(uint32_t clk_id, uint32_t rate_min,  uint32_t rate_max);
 
 /*To get the rate for the corresponding clock ID. Pass the clock ID as defined in the enum S3x_CLK_ID*/
-int S3x_Clk_Get_Rate(UINT32_t clk_id);
+int S3x_Clk_Get_Rate(uint32_t clk_id);
 
 /*To get Status for the clock*/
-int S3x_Clk_Get_Status(UINT32_t clk_id);
+int S3x_Clk_Get_Status(uint32_t clk_id);
 
 /*To get the use count for the clock ID (gate)*/
-int S3x_Clk_Get_Usecnt(UINT32_t clk_id);
+int S3x_Clk_Get_Usecnt(uint32_t clk_id);
 
-int S3x_Register_Qos_Node(UINT32_t clk_id);
+int S3x_Register_Qos_Node(uint32_t clk_id);
 
-int S3x_Set_Qos_Req(UINT32_t clk_id, QOS_REQ_TYPE, UINT32_t val);
+int S3x_Set_Qos_Req(uint32_t clk_id, QOS_REQ_TYPE, uint32_t val);
 
-int S3x_Get_Qos_Req(UINT32_t clk_id, QOS_REQ_TYPE req);
+int S3x_Get_Qos_Req(uint32_t clk_id, QOS_REQ_TYPE req);
 
-int S3x_Clear_Qos_Req(UINT32_t clk_id, QOS_REQ_TYPE);
+int S3x_Clear_Qos_Req(uint32_t clk_id, QOS_REQ_TYPE);
 
 #endif      /* __S3X_CLOCK_HAL_H  */

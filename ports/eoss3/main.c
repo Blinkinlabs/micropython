@@ -9,6 +9,10 @@
 #include "py/mperrno.h"
 #include "lib/utils/pyexec.h"
 
+#include "machine_fpga.h"
+#include "machine_fpga.h"
+#include "AL4S3B_FPGA_top_bit.h"   // FPGA bitstream to load into FPGA
+
 #if MICROPY_ENABLE_COMPILER
 void do_str(const char *src, mp_parse_input_kind_t input_kind) {
     nlr_buf_t nlr;
@@ -33,6 +37,13 @@ static char *stack_top;
 static char heap[32768];
 
 int main(int argc, char **argv) {
+
+// FPGA routine                                                                               
+    
+    load_fpga_sane(sizeof(axFPGABitStream),axFPGABitStream);     // Load bitstrem into FPGA   
+    
+// Done FGPA routine
+
     int stack_dummy;
     stack_top = (char *)&stack_dummy;
 

@@ -46,8 +46,7 @@ endif
 CFLAGS += -DLFS2_NO_MALLOC -DLFS2_NO_DEBUG -DLFS2_NO_WARN -DLFS2_NO_ERROR -DLFS2_NO_ASSERT
 
 LIBS =
-#LIBS += /usr/lib/arm-none-eabi/newlib/thumb/v7e-m/fpv4-sp/softfp/libm.a
-LIBS += /usr/lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a
+LIBS += $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
 SRC_C = \
 	main.c \
@@ -55,6 +54,8 @@ SRC_C = \
 	modmachine.c \
 	uart_core.c \
 	machine_spiflash.c \
+	machine_fpga.c \
+	#HAL/src/s3x_clock.c \
 
 PYLIB_SRC_C = \
 	lib/utils/printf.c \
@@ -125,6 +126,9 @@ flash: $(BUILD)/firmware.bin
 		--reset \
 		--m4app $< \
 
+flash-remote: $(BUILD)/firmware.bin
+	scp $(BUILD)/firmware.bin matt@192.168.178.18:/home/matt/Desktop/image.bin
+	ssh matt@192.168.178.18 "cd ~/Desktop; ./flash.sh"
 
 
 include $(TOP)/py/mkrules.mk
