@@ -36,9 +36,12 @@
 #include "py/mphal.h"
 #include "py/stream.h"
 #include "extmod/machine_mem.h"
-//#include "extmod/machine_pin.h"
 //#include "extmod/machine_pwm.h"
 #include "machine_spiflash.h"
+
+#include "machine_fpga.h"
+#include "AL4S3B_FPGA_top_bit.h"   // FPGA bitstream to load into FPGA
+
 
 #include "Fw_global_config.h"
 #include "eoss3_dev.h"
@@ -93,6 +96,13 @@ machine_bootloader(void) {
 }
 MP_DEFINE_CONST_FUN_OBJ_0(machine_bootloader_obj, machine_bootloader);
 
+static mp_obj_t
+machine_fpga(void) {
+	load_fpga_sane(sizeof(axFPGABitStream), axFPGABitStream);
+	return mp_const_none; // better not reach here!
+}
+MP_DEFINE_CONST_FUN_OBJ_0(machine_fpga_obj, machine_fpga);
+
 extern const mp_obj_type_t mp_machine_eoss3_spi_type;
 
 #if 0
@@ -126,6 +136,7 @@ STATIC const mp_rom_map_elem_t machine_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__),            MP_ROM_QSTR(MP_QSTR_umachine) },
     { MP_ROM_QSTR(MP_QSTR_reset),               MP_ROM_PTR(&machine_reset_obj) },
     { MP_ROM_QSTR(MP_QSTR_bootloader),          MP_ROM_PTR(&machine_bootloader_obj) },
+    { MP_ROM_QSTR(MP_QSTR_fpga),                MP_ROM_PTR(&machine_fpga_obj) },
 
 /*
     { MP_ROM_QSTR(MP_QSTR_unique_id),           MP_ROM_PTR(&machine_unique_id_obj) },

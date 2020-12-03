@@ -69,21 +69,21 @@ typedef enum
     /*TODO : Check for S3X_M4_BM_TB_CLK. Current status - Not handled*/
    S3X_M4_BM_TB_CLK, //  19 to M4 Bus Matrix and Trace block
                      //  This bit will be set if any of the Memories (M4S0~M4S3)been wakeup  by Hardware.
-   S3X_M4_S0_S3_CLK,// 20 to M4 SRAM Instance, M4S0~M4S3.
-   S3X_M4_S4_S7_CLK,// 21 to M4 SRAM Instance, M4S4~M4S7
-   S3X_M4_S8_S11_CLK,// 22 to M4 SRAM Instance, M4S8~M4S11
-   S3X_M4_S12_S15_CLK,// 23 to M4 SRAM Instance, M4S12~M4S15
-   S3X_AUDIO_DMA_CLK,// 24 to AUDIO DMA
-   S3X_SYNCUP_A0_AHB_CLK,// 25 to the SYNC Up on A0 and AHB Interface of Batching Memory
+   S3X_M4_S0_S3_CLK,        // 20 to M4 SRAM Instance, M4S0~M4S3.
+   S3X_M4_S4_S7_CLK,        // 21 to M4 SRAM Instance, M4S4~M4S7
+   S3X_M4_S8_S11_CLK,       // 22 to M4 SRAM Instance, M4S8~M4S11
+   S3X_M4_S12_S15_CLK,      // 23 to M4 SRAM Instance, M4S12~M4S15
+   S3X_AUDIO_DMA_CLK,       // 24 to AUDIO DMA
+   S3X_SYNCUP_A0_AHB_CLK,   // 25 to the SYNC Up on A0 and AHB Interface of Batching Memory
 
    /*C11 clk gate*/
-   S3X_M4_PRPHRL_CLK,// 26 to M4 peripherals - AHB/APB bridge, UART, WDT and TIMER
+   S3X_M4_PRPHRL_CLK,       // 26 to M4 peripherals - AHB/APB bridge, UART, WDT and TIMER
 
    /*CS clk gate*/
-   S3X_SWD_PIN_CLK, //  27 to SWD Clk from PIN
+   S3X_SWD_PIN_CLK,         //  27 to SWD Clk from PIN
 
    /*C16 clk gate*/
-   S3X_FB_16_CLK, // 28 to FB *********** FB from C02 also. Need to check******************
+   S3X_FB_16_CLK,           // 28 to FB *********** FB from C02 also. Need to check******************
 
    /*CLK reserved 0*/
 
@@ -94,13 +94,14 @@ typedef enum
    S3X_FB_21_CLK, // 30 To FB(additional clock) ********** FB from C16 also. Need to check******************
 
    /* C30 C31 */
-   S3X_PDM_LEFT,    //31
-   S3X_PDM_RIGHT,   //32
-   S3X_PDM_STEREO,  //33
-   S3X_I2S_MASTER,  //34
-   S3X_LPSD,        //35
-   S3X_MAX_CLK      //36
+   S3X_PDM_LEFT,            //31
+   S3X_PDM_RIGHT,           //32
+   S3X_PDM_STEREO,          //33
+   S3X_I2S_MASTER,          //34
+   S3X_LPSD,                //35
+   S3X_MAX_CLK              //36
 }S3x_CLK_ID;
+
 #define MAX_QOS_REQ 3
 typedef enum {
     MIN_HSOSC_FREQ = 0x1,

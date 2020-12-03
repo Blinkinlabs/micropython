@@ -55,7 +55,6 @@ SRC_C = \
 	uart_core.c \
 	machine_spiflash.c \
 	machine_fpga.c \
-	#HAL/src/s3x_clock.c \
 
 PYLIB_SRC_C = \
 	lib/utils/printf.c \

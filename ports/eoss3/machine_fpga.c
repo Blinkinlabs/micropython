@@ -48,26 +48,83 @@
 
 /*To enable clock. Pass the clock ID as defined in the enum S3x_CLK_ID*/
 int S3x_Clk_Enable(uint32_t clk_id) {
-	return 1;
+    // Clock gating on the EOS-S3 is somewhat convoluted, so just hardcode sequences for the clocks
+    // that we care about.
+    switch(clk_id) {
+    case S3X_FB_16_CLK:  // FPGA Sys_Clk0
+        CRU->CLK_DIVIDER_CLK_GATING |= (1<<0);
+        //CRU->CLK_CTRL_F_0;                   // Clock divider setting
+        //CRU->CLK_CTRL_F_1 = 0;               // Select high-speed clock
+        CRU->C16_CLK_GATE |= (1<<0);           // Enable clock gate
+        break;
+    case S3X_FB_21_CLK:  // FPGA Sys_Clk1
+        CRU->CLK_DIVIDER_CLK_GATING |= (1<<8);
+        //CRU->CLK_CTRL_I_0;                   // Clock divider setting
+        //CRU->CLK_CTRL_I_1 = 0;               // Select high-speed clock
+        CRU->C21_CLK_GATE |= (1<<0);           // Enable clock gate
+        break;
+    case S3X_FB_02_CLK:  // FPGA Sys_Pclk
+        CRU->CLK_DIVIDER_CLK_GATING |= (1<<1);
+        //CRU->CLK_CTRL_B_0                    // Clock divider setting
+        //CRU->CLK_SWITCH_FOR_B = 0;           // Select high-speed clock
+        CRU->C02_CLK_GATE |= (1<<1);	       // Enable clock gate
+        break;
+    case S3X_A0_08_CLK:
+        CRU->CLK_DIVIDER_CLK_GATING |= (1<<2);
+        // Clock divider setting
+        //CRU->CLK_SWITCH_FOR_C = 0;           // Select high-speed clock
+        CRU->C08_X1_CLK_GATE |= (1<<3);        // Enable clock gate
+        break;
+    case S3X_CLKGATE_FB:
+        CRU->CLK_DIVIDER_CLK_GATING |= (1<<0);
+        // Clock divider setting
+        // Select high-speed clock
+        CRU->C09_CLK_GATE |= (1<<2);	       // Enable clock gate
+        break;
+    case S3X_CLKGATE_PIF:
+        CRU->CLK_DIVIDER_CLK_GATING |= (1<<0);
+        // Clock divider setting
+        // Select high-speed clock
+        CRU->C09_CLK_GATE |= (1<<1);	       // Enable clock gate
+        break;
+    default:
+        return 0;
+    }
+
+    return 1;
 }
 
 /*To disable clock. Pass the clock ID as defined in the enum S3x_CLK_ID*/
 int S3x_Clk_Disable(uint32_t clk_id) {
-	return 1;
+    // Clock gating on the EOS-S3 is somewhat convoluted, so just hardcode sequences for the clocks
+    // that we care about.
+    switch(clk_id) {
+    case S3X_FB_16_CLK:
+        CRU->C16_CLK_GATE &= ~(1<<0);
+        break;
+    case S3X_FB_21_CLK:
+        CRU->C21_CLK_GATE &= ~(1<<0);
+        break;
+    case S3X_FB_02_CLK:
+        CRU->C02_CLK_GATE &= ~(1<<1);	       // Enable clock gate
+        break;
+    default:
+        return 0;
+    }
+
+    return 1;
 }
 
 /*To set clock rate. Pass the cloack ID and the desired rate*/
 int S3x_Clk_Set_Rate(uint32_t clk_id, uint32_t rate) {
-	return 1;
+    // TODO
+    return 0;
 }
 
-
-// internal function
-
 static void low_rent_delay(uint32_t counts) {
-	for (uint32_t i=0;i<counts; i++) {
-		PMU->GEN_PURPOSE_1  = i << 4;
-	}
+    for (uint32_t i=0;i<counts; i++) {
+        PMU->GEN_PURPOSE_1  = i << 4;
+    }
 }
 
 // Start the FPGA load process
@@ -76,15 +133,13 @@ void fpga_load_begin() {
     // It doesn't seem like the clocks actually /have/ to be disabled, but might cause side effects.
     S3x_Clk_Disable(S3X_FB_21_CLK);     // FPGA general purpose clocks                        
     S3x_Clk_Disable(S3X_FB_16_CLK);     
+    S3x_Clk_Disable(S3X_FB_02_CLK);
     // TODO: Why not Sys_Pclk?
 
     // Abbreviated and translated from the STK load_fpga() function
     // This doesn't appear to be documented, but does appear to work
-
     
-    S3x_Clk_Enable(S3X_FB_02_CLK);
     S3x_Clk_Enable(S3X_A0_08_CLK);
-//    S3x_Clk_Enable(S3X_FB_16_CLK);
     S3x_Clk_Enable(S3X_CLKGATE_FB);
     S3x_Clk_Enable(S3X_CLKGATE_PIF);
     
@@ -129,8 +184,9 @@ void fpga_load_end() {
     PMU->FB_ISOLATION = 0;
 
     // TODO: Expose clock speed config
-    S3x_Clk_Set_Rate(S3X_FB_21_CLK, 12000*1000);        // FPGA general purpose clocks        
-    S3x_Clk_Set_Rate(S3X_FB_16_CLK, 12000*1000);        
+    S3x_Clk_Set_Rate(S3X_FB_21_CLK, 12000*1000);
+    S3x_Clk_Set_Rate(S3X_FB_16_CLK, 12000*1000);
+    S3x_Clk_Enable(S3X_FB_02_CLK);
     S3x_Clk_Enable(S3X_FB_21_CLK);
     S3x_Clk_Enable(S3X_FB_16_CLK);
 }
